@@ -6,21 +6,45 @@
 
 ## Русский
 
-Сборник полезных серверных визуальных фич и утилит для Bukkit/Paper. Позволяет создавать невидимые рамки, настраивать отображение ролей игроков в статус-баре при наведении, гибко управлять видимостью никнеймов и кастомизировать Tab-лист (заголовки, подвалы, пинг и префиксы).
+Сборник полезных серверных визуальных фич, кастомных рецептов и утилит для Bukkit/Paper.
 
 ### Фичи
-- **Невидимые рамки:** Клик взрывным зельем невидимости по рамке с предметом делает её невидимой. При снятии предмета рамка возвращается в нормальное состояние.
-- **Отображение ролей:** Отображает кастомные роли игроков в статус-баре (Action Bar) при наведении курсора.
-- **Интеграция с Tab:** Кастомизация Tab-листа с отображением пинга, онлайна, префиксов миров и текущей роли игрока.
-- **Автономность ролей:** Вы можете настроить роли независимо от внешних плагинов через сопоставление прав (Permissions) в `config.yml`. Также поддерживается обратная совместимость (fallback) на базу ролей плагина `blockcommand`.
+- **Невидимые рамки:** Клик взрывным зельем невидимости по рамке с предметом делает её невидимой.
+- **Стучание в двери:** Возможность «постучать» в деревянную дверь (Shift + ЛКМ).
+- **Ремонт наковален:** Быстрый ремонт поврежденной наковальни при помощи железного блока (Shift + ПКМ).
+- **Подпись предметов:** Подпись любого предмета при помощи пера (Shift + ПКМ).
+- **Защита артов:** Защита заблокированных артов (карт), книг и шаблонов от копирования другими игроками.
+- **Изменение размера:** Команда `/scale` для изменения размера модельки игрока.
+- **Кастомные рецепты:** Возможность создавать собственные Shaped рецепты крафта с настраиваемыми именами и описаниями результатов через `config.yml`.
+- **Кастомизация Tab:** Настройка заголовков, подвалов, пинга, ролей и префиксов миров.
+
+### Команды
+- `/scale <размер от 0.9 до 1.1>` — Изменить размер модельки.
+- `/lock` — Заблокировать карту/книгу от копирования.
+- `/unlock` — Разблокировать карту/книгу.
+- `/serverutils reload` — Перезагрузить конфигурацию плагина (право `serverutils.admin`).
 
 ### Настройка конфигурации (config.yml)
 ```yaml
-# Язык по умолчанию: "ru" или "en"
+# Язык по умолчанию: "ru" или "en" (файлы локализации находятся в lang/)
 lang: "ru"
 
+# Включение и отключение отдельных функций плагина
+features:
+  elytra-end-restriction: true     # Запрет полетов на элитрах в Энде
+  anvil-repair: true               # Ремонт наковален железными блоками
+  door-knocking: true              # Стук в деревянные двери (Shift + ЛКМ)
+  enderman-pickup-protection: true # Запрет эндерменам переносить блоки
+  item-signing: true               # Подпись предметов пером (Shift + ПКМ)
+  item-lock-protection: true       # Защита заблокированных артов/книг от копирования
+  tab-formatter: true              # Форматирование списка игроков (Tab)
+  hide-nametags: true              # Скрытие никнеймов над головой игроков
+  recipes:
+    invisible-frame: true          # Крафт невидимой рамки
+    invisible-light: true          # Крафт невидимого источника света
+    debug-stick: true              # Крафт отладочной палки (Debug Stick)
+
 # Сопоставление ролей с правами доступа (для отображения в Tab и Action Bar).
-# Игроку присваивается первая роль из списка, на которую у него есть право (permission).
 role-permissions:
   admin: "serverutils.role.admin"
   detective: "serverutils.role.detective"
@@ -28,41 +52,66 @@ role-permissions:
   judge: "serverutils.role.judge"
   mayor: "serverutils.role.mayor"
 
-messages:
-  ru:
-    invisible_frame_name: "Невидимая рамка"
-    tab_title: "Minecraft"
-    tab_online: "Онлайн: "
-    tab_role: "Ваша роль: "
-    tab_ping: "Пинг: "
-    tab_ping_ms: " мс"
-    roles:
-      admin: "§c§lАдминистратор"
-      detective: "§bДетектив"
-      banker: "§6Банкир"
-      judge: "§dСудья"
-      mayor: "§aМэр"
-      default: "§7Житель"
+# Кастомные Shaped рецепты крафта
+custom-recipes:
+  saddle:
+    enabled: true
+    result:
+      type: "SADDLE"
+      amount: 1
+      name: "&eСамодельное седло"
+      lore:
+        - "&7Создано из качественной кожи"
+        - "&7и прочных нитей."
+    shape:
+      - "LLL"
+      - "S S"
+      - "   "
+    ingredients:
+      L: "LEATHER"
+      S: "STRING"
 ```
 
 ---
 
 ## English
 
-A clean and configurable server utility plugin for Bukkit/Paper servers. It adds several visual and utility adjustments to enhance vanilla gameplay, such as invisible item frames, custom Tab lists, hidden name tags, and customizable player roles display.
+A clean and configurable server utility and custom recipe plugin for Bukkit/Paper servers.
 
 ### Features
 - **Invisible Item Frames:** Splash an invisibility potion on a frame to turn it invisible.
-- **Role Display:** Shows player roles in the action bar when pointing at them.
-- **Tab Integration:** Formats the header and footer of player lists (Tab) to show customized branding, online player counts, player ping, and active roles.
-- **Configurable Roles:** Configure roles independently of external plugins by mapping roles to permission nodes in `config.yml`. It also falls back to checking local player roles from `blockcommand` if present.
+- **Door Knocking:** Knock on wooden doors (Shift + Left Click).
+- **Anvil Repair:** Repair chipped/damaged anvils using an iron block (Shift + Right Click).
+- **Item Signing:** Sign any item with a feather (Shift + Right Click).
+- **Art Protection:** Protect locked maps (arts), written books, and templates from copying by others.
+- **Player Scaling:** Command `/scale` to change player model scale size.
+- **Custom Recipes:** Register custom Shaped crafting recipes with names and lore via `config.yml`.
+- **Tab Customization:** Format header/footer, ping, world prefixes, and player roles.
+
+### Commands
+- `/scale <size from 0.9 to 1.1>` — Change your size.
+- `/lock` — Lock a map/book from being copied.
+- `/unlock` — Unlock a map/book.
+- `/serverutils reload` — Reload the configuration (permission `serverutils.admin`).
 
 ### Configuration Example (config.yml)
 ```yaml
 lang: "en"
 
-# Map roles to permission nodes. 
-# The player will be assigned the first matched role they have permission for.
+features:
+  elytra-end-restriction: true     # Disable elytra gliding in the End
+  anvil-repair: true               # Repair anvils with iron blocks
+  door-knocking: true              # Knock on wooden doors (Shift + Left Click)
+  enderman-pickup-protection: true # Stop Endermen from picking up blocks
+  item-signing: true               # Sign items with a feather (Shift + Right Click)
+  item-lock-protection: true       # Protect locked maps/books from copying
+  tab-formatter: true              # Format player lists (Tab)
+  hide-nametags: true              # Hide name tags above player heads
+  recipes:
+    invisible-frame: true          # Recipe for invisible frames
+    invisible-light: true          # Recipe for invisible light blocks
+    debug-stick: true              # Recipe for debug sticks
+
 role-permissions:
   admin: "serverutils.role.admin"
   detective: "serverutils.role.detective"
@@ -70,19 +119,21 @@ role-permissions:
   judge: "serverutils.role.judge"
   mayor: "serverutils.role.mayor"
 
-messages:
-  en:
-    invisible_frame_name: "Invisible Frame"
-    tab_title: "Minecraft"
-    tab_online: "Online: "
-    tab_role: "Your Role: "
-    tab_ping: "Ping: "
-    tab_ping_ms: " ms"
-    roles:
-      admin: "§c§lAdministrator"
-      detective: "§bDetective"
-      banker: "§6Banker"
-      judge: "§dJudge"
-      mayor: "§aMayor"
-      default: "§7Citizen"
+custom-recipes:
+  saddle:
+    enabled: true
+    result:
+      type: "SADDLE"
+      amount: 1
+      name: "&eHandmade Saddle"
+      lore:
+        - "&7Crafted using leather"
+        - "&7and strong threads."
+    shape:
+      - "LLL"
+      - "S S"
+      - "   "
+    ingredients:
+      L: "LEATHER"
+      S: "STRING"
 ```

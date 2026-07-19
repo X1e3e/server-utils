@@ -25,3 +25,22 @@ role-permissions:
   banker: "serverutils.role.banker"
   judge: "serverutils.role.judge"
   mayor: "serverutils.role.mayor"
+
+# Кастомные Shaped рецепты крафта
+custom-recipes:
+  saddle:
+    enabled: true
+    result:
+      type: "SADDLE"
+      amount: 1
+      name: "&eСамодельное седло"
+      lore:
+        - "&7Создано из качественной кожи"
+        - "&7и прочных нитей."
+    shape:
+      - "LLL"
+      - "S S"
+      - "   "
+    ingredients:
+      L: "LEATHER"
+      S: "STRING"

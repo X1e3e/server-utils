@@ -15,4 +15,8 @@ commands:
   unlock:
     description: Unlock copy protection of an item
     usage: /unlock
+  serverutils:
+    description: Reload Server Utils configuration
+    usage: /serverutils reload
+    aliases: [slfeatures, sutils]
 

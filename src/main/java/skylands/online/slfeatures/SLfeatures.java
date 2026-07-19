@@ -59,6 +59,8 @@ public final class SLfeatures extends JavaPlugin implements Listener {
             registerDebugStickRecipe();
         }
         
+        loadCustomRecipes();
+        
         UtilityCommands utilCmds = new UtilityCommands(this);
         if (getCommand("scale") != null) {
             getCommand("scale").setExecutor(utilCmds);
@@ -69,6 +71,10 @@ public final class SLfeatures extends JavaPlugin implements Listener {
         }
         if (getCommand("unlock") != null) {
             getCommand("unlock").setExecutor(utilCmds);
+        }
+        if (getCommand("serverutils") != null) {
+            getCommand("serverutils").setExecutor(utilCmds);
+            getCommand("serverutils").setTabCompleter(utilCmds);
         }
         
         if (getConfig().getBoolean("features.tab-formatter", true)) {
@@ -417,6 +423,110 @@ public final class SLfeatures extends JavaPlugin implements Listener {
             loadLangConfig();
         }
         return langConfig;
+    }
+
+    private final java.util.List<NamespacedKey> customRecipeKeys = new java.util.ArrayList<>();
+
+    private void loadCustomRecipes() {
+        // Unregister old custom recipes on reload
+        for (NamespacedKey key : customRecipeKeys) {
+            try {
+                Bukkit.removeRecipe(key);
+            } catch (Exception ignored) {}
+        }
+        customRecipeKeys.clear();
+
+        org.bukkit.configuration.ConfigurationSection customSection = getConfig().getConfigurationSection("custom-recipes");
+        if (customSection == null) return;
+
+        for (String key : customSection.getKeys(false)) {
+            org.bukkit.configuration.ConfigurationSection recipeSec = customSection.getConfigurationSection(key);
+            if (recipeSec == null || !recipeSec.getBoolean("enabled", true)) continue;
+
+            // Result
+            String resultTypeStr = recipeSec.getString("result.type");
+            if (resultTypeStr == null) continue;
+            Material resultMat = Material.getMaterial(resultTypeStr.toUpperCase());
+            if (resultMat == null) {
+                getLogger().warning("Invalid material for custom recipe result: " + resultTypeStr);
+                continue;
+            }
+
+            int amount = recipeSec.getInt("result.amount", 1);
+            ItemStack result = new ItemStack(resultMat, amount);
+
+            // Display name & Lore
+            ItemMeta meta = result.getItemMeta();
+            if (meta != null) {
+                String displayName = recipeSec.getString("result.name");
+                if (displayName != null && !displayName.isEmpty()) {
+                    meta.displayName(net.kyori.adventure.text.Component.text(
+                        org.bukkit.ChatColor.translateAlternateColorCodes('&', displayName)
+                    ));
+                }
+                List<String> loreLines = recipeSec.getStringList("result.lore");
+                if (loreLines != null && !loreLines.isEmpty()) {
+                    List<net.kyori.adventure.text.Component> lore = new java.util.ArrayList<>();
+                    for (String line : loreLines) {
+                        lore.add(net.kyori.adventure.text.Component.text(
+                            org.bukkit.ChatColor.translateAlternateColorCodes('&', line)
+                        ));
+                    }
+                    meta.lore(lore);
+                }
+                result.setItemMeta(meta);
+            }
+
+            // Shape
+            List<String> shapeLines = recipeSec.getStringList("shape");
+            if (shapeLines == null || shapeLines.isEmpty()) continue;
+
+            NamespacedKey namespacedKey = new NamespacedKey(this, "custom_" + key.toLowerCase());
+            ShapedRecipe recipe = new ShapedRecipe(namespacedKey, result);
+            recipe.shape(shapeLines.toArray(new String[0]));
+
+            // Ingredients
+            org.bukkit.configuration.ConfigurationSection ingredientsSec = recipeSec.getConfigurationSection("ingredients");
+            if (ingredientsSec == null) continue;
+
+            boolean validIngredients = true;
+            for (String chStr : ingredientsSec.getKeys(false)) {
+                if (chStr.isEmpty()) continue;
+                char ingredientChar = chStr.charAt(0);
+                String ingMatStr = ingredientsSec.getString(chStr);
+                if (ingMatStr == null) continue;
+
+                Material ingMat = Material.getMaterial(ingMatStr.toUpperCase());
+                if (ingMat == null) {
+                    getLogger().warning("Invalid material for custom recipe ingredient: " + ingMatStr);
+                    validIngredients = false;
+                    break;
+                }
+                recipe.setIngredient(ingredientChar, ingMat);
+            }
+
+            if (validIngredients) {
+                Bukkit.addRecipe(recipe);
+                customRecipeKeys.add(namespacedKey);
+                getLogger().info("Successfully registered custom recipe: " + key);
+            }
+        }
+    }
+
+    public void reloadPlugin() {
+        reloadConfig();
+        lang = getConfig().getString("lang", "ru").toLowerCase();
+        loadLangConfig();
+        
+        loadCustomRecipes();
+
+        if (tabTask != null) {
+            tabTask.cancel();
+            tabTask = null;
+        }
+        if (getConfig().getBoolean("features.tab-formatter", true)) {
+            startTabFormatter();
+        }
     }
 }
 

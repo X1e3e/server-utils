@@ -42,9 +42,25 @@ public class UtilityCommands implements CommandExecutor, TabCompleter {
             return handleScale(sender, args);
         } else if (cmdName.equals("lock") || cmdName.equals("unlock")) {
             return handleLockUnlock(sender, cmdName, args);
+        } else if (cmdName.equals("serverutils")) {
+            return handleServerUtils(sender, args);
         }
 
         return false;
+    }
+
+    private boolean handleServerUtils(CommandSender sender, String[] args) {
+        if (args.length > 0 && args[0].equalsIgnoreCase("reload")) {
+            if (!sender.hasPermission("serverutils.admin")) {
+                sender.sendMessage(Component.text(getMsg("no_permission", "§cНедостаточно прав!"), NamedTextColor.RED));
+                return true;
+            }
+            plugin.reloadPlugin();
+            sender.sendMessage(Component.text(getMsg("reload_success", "§aКонфигурация плагина успешно перезагружена!"), NamedTextColor.GREEN));
+            return true;
+        }
+        sender.sendMessage(Component.text("Использование: /serverutils reload", NamedTextColor.AQUA));
+        return true;
     }
 
     private boolean handleScale(CommandSender sender, String[] args) {
@@ -170,6 +186,12 @@ public class UtilityCommands implements CommandExecutor, TabCompleter {
             if ("1.0".startsWith(args[0])) completions.add("1.0");
             if ("1.1".startsWith(args[0])) completions.add("1.1");
             return completions;
+        } else if (cmdName.equals("serverutils") && args.length == 1) {
+            if (sender.hasPermission("serverutils.admin")) {
+                if ("reload".startsWith(args[0].toLowerCase())) {
+                    return Collections.singletonList("reload");
+                }
+            }
         }
         return Collections.emptyList();
     }
