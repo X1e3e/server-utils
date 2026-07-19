@@ -218,6 +218,21 @@ public final class SLfeatures extends JavaPlugin implements Listener {
     }
 
     private String getPlayerRole(Player player) {
+        // 1. Check custom configured permission mapping first
+        org.bukkit.configuration.ConfigurationSection rolePerms = getConfig().getConfigurationSection("role-permissions");
+        if (rolePerms != null) {
+            for (String roleKey : rolePerms.getKeys(false)) {
+                String perm = rolePerms.getString(roleKey);
+                if (perm != null && !perm.isEmpty() && player.hasPermission(perm)) {
+                    String mappedRole = getConfig().getString("messages." + lang + ".roles." + roleKey.toLowerCase());
+                    if (mappedRole != null) {
+                        return mappedRole;
+                    }
+                }
+            }
+        }
+
+        // 2. Fallback to blockcommand config integration
         org.bukkit.plugin.Plugin blockcommand = Bukkit.getPluginManager().getPlugin("blockcommand");
         if (blockcommand != null) {
             File playersFile = new File(blockcommand.getDataFolder(), "players.yml");

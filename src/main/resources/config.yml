@@ -1,10 +1,19 @@
 # Language: "ru" or "en"
 lang: "ru"
 
+# Сопоставление ролей с правами доступа (для отображения роли в Tab и статус-баре)
+# Игроку будет присвоена первая роль из списка, на которую у него есть право (permission).
+role-permissions:
+  admin: "serverutils.role.admin"
+  detective: "serverutils.role.detective"
+  banker: "serverutils.role.banker"
+  judge: "serverutils.role.judge"
+  mayor: "serverutils.role.mayor"
+
 messages:
   ru:
     invisible_frame_name: "Невидимая рамка"
-    tab_title: "SkyLands"
+    tab_title: "Minecraft"
     tab_online: "Онлайн: "
     tab_role: "Ваша роль: "
     tab_ping: "Пинг: "
@@ -23,7 +32,7 @@ messages:
       default: "●"
   en:
     invisible_frame_name: "Invisible Frame"
-    tab_title: "SkyLands"
+    tab_title: "Minecraft"
     tab_online: "Online: "
     tab_role: "Your Role: "
     tab_ping: "Ping: "
