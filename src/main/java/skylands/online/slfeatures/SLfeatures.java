@@ -44,11 +44,25 @@ public final class SLfeatures extends JavaPlugin implements Listener {
         invisibleFrameKey = new NamespacedKey(this, "invisible");
         
         getServer().getPluginManager().registerEvents(this, this);
+        getServer().getPluginManager().registerEvents(new FeaturesListener(this), this);
         
         setupScoreboard();
         registerInvisibleFrameRecipe();
         registerInvisibleLightRecipe();
         registerDebugStickRecipe();
+        
+        UtilityCommands utilCmds = new UtilityCommands(this);
+        if (getCommand("scale") != null) {
+            getCommand("scale").setExecutor(utilCmds);
+            getCommand("scale").setTabCompleter(utilCmds);
+        }
+        if (getCommand("lock") != null) {
+            getCommand("lock").setExecutor(utilCmds);
+        }
+        if (getCommand("unlock") != null) {
+            getCommand("unlock").setExecutor(utilCmds);
+        }
+        
         startTabFormatter();
         
         getLogger().info("SLfeatures has been enabled successfully!");

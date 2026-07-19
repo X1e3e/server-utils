@@ -5,3 +5,14 @@ api-version: '26.2'
 load: POSTWORLD
 softdepend: [blockcommand]
 
+commands:
+  scale:
+    description: Change player model scale size
+    usage: /scale <size>
+  lock:
+    description: Lock item from copying by other players
+    usage: /lock
+  unlock:
+    description: Unlock copy protection of an item
+    usage: /unlock
+
