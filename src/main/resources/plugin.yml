@@ -1,0 +1,7 @@
+name: SLfeatures
+version: '${version}'
+main: skylands.online.slfeatures.SLfeatures
+api-version: '26.2'
+load: POSTWORLD
+softdepend: [blockcommand]
+

@@ -1,0 +1,42 @@
+# Language: "ru" or "en"
+lang: "ru"
+
+messages:
+  ru:
+    invisible_frame_name: "Невидимая рамка"
+    tab_title: "SkyLands"
+    tab_online: "Онлайн: "
+    tab_role: "Ваша роль: "
+    tab_ping: "Пинг: "
+    tab_ping_ms: " мс"
+    roles:
+      admin: "§c§lАдминистратор"
+      detective: "§bДетектив"
+      banker: "§6Банкир"
+      judge: "§dСудья"
+      mayor: "§aМэр"
+      default: "§7Житель"
+    world_prefixes:
+      farms: "●"
+      arts: "●"
+      banished: "●"
+      default: "●"
+  en:
+    invisible_frame_name: "Invisible Frame"
+    tab_title: "SkyLands"
+    tab_online: "Online: "
+    tab_role: "Your Role: "
+    tab_ping: "Ping: "
+    tab_ping_ms: " ms"
+    roles:
+      admin: "§c§lAdministrator"
+      detective: "§bDetective"
+      banker: "§6Banker"
+      judge: "§dJudge"
+      mayor: "§aMayor"
+      default: "§7Citizen"
+    world_prefixes:
+      farms: "●"
+      arts: "●"
+      banished: "●"
+      default: "●"
