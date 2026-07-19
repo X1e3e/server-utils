@@ -1,0 +1,18 @@
+invisible_frame_name: "Невидимая рамка"
+tab_title: "Minecraft"
+tab_online: "Онлайн: "
+tab_role: "Ваша роль: "
+tab_ping: "Пинг: "
+tab_ping_ms: " мс"
+roles:
+  admin: "§c§lАдминистратор"
+  detective: "§bДетектив"
+  banker: "§6Банкир"
+  judge: "§dСудья"
+  mayor: "§aМэр"
+  default: "§7Житель"
+world_prefixes:
+  farms: "●"
+  arts: "●"
+  banished: "●"
+  default: "●"

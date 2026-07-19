@@ -1,0 +1,18 @@
+invisible_frame_name: "Invisible Frame"
+tab_title: "Minecraft"
+tab_online: "Online: "
+tab_role: "Your Role: "
+tab_ping: "Ping: "
+tab_ping_ms: " ms"
+roles:
+  admin: "§c§lAdministrator"
+  detective: "§bDetective"
+  banker: "§6Banker"
+  judge: "§dJudge"
+  mayor: "§aMayor"
+  default: "§7Citizen"
+world_prefixes:
+  farms: "●"
+  arts: "●"
+  banished: "●"
+  default: "●"

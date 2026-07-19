@@ -32,6 +32,7 @@ public final class SLfeatures extends JavaPlugin implements Listener {
     private NamespacedKey invisibleFrameKey;
     private BukkitTask tabTask;
     private String lang;
+    private org.bukkit.configuration.file.FileConfiguration langConfig;
 
     @Override
     public void onEnable() {
@@ -39,6 +40,7 @@ public final class SLfeatures extends JavaPlugin implements Listener {
         reloadConfig();
         
         lang = getConfig().getString("lang", "ru").toLowerCase();
+        loadLangConfig();
         invisibleFrameKey = new NamespacedKey(this, "invisible");
         
         getServer().getPluginManager().registerEvents(this, this);
@@ -79,7 +81,7 @@ public final class SLfeatures extends JavaPlugin implements Listener {
         ItemStack result = new ItemStack(Material.ITEM_FRAME);
         ItemMeta meta = result.getItemMeta();
         if (meta != null) {
-            String frameName = getConfig().getString("messages." + lang + ".invisible_frame_name", "Невидимая рамка");
+            String frameName = getLangConfig().getString("invisible_frame_name", "Невидимая рамка");
             meta.displayName(net.kyori.adventure.text.Component.text(frameName, net.kyori.adventure.text.format.NamedTextColor.GOLD));
             meta.getPersistentDataContainer().set(invisibleFrameKey, PersistentDataType.BYTE, (byte) 1);
             result.setItemMeta(meta);
@@ -129,7 +131,7 @@ public final class SLfeatures extends JavaPlugin implements Listener {
         tabTask = Bukkit.getScheduler().runTaskTimer(this, () -> {
             int max = Bukkit.getMaxPlayers();
 
-            String title = getConfig().getString("messages." + lang + ".tab_title", "SkyLand");
+            String title = getLangConfig().getString("tab_title", "Minecraft");
             net.kyori.adventure.text.format.TextColor blueColor = net.kyori.adventure.text.format.TextColor.color(0x3b82f6);
             net.kyori.adventure.text.Component header = net.kyori.adventure.text.Component.text()
                 .append(net.kyori.adventure.text.Component.text("\n   ", blueColor))
@@ -173,10 +175,10 @@ public final class SLfeatures extends JavaPlugin implements Listener {
                     }
                 }
 
-                String labelOnline = getConfig().getString("messages." + lang + ".tab_online", "Онлайн: ");
-                String labelRole = getConfig().getString("messages." + lang + ".tab_role", "Ваша роль: ");
-                String labelPing = getConfig().getString("messages." + lang + ".tab_ping", "Пинг: ");
-                String labelPingMs = getConfig().getString("messages." + lang + ".tab_ping_ms", " мс");
+                String labelOnline = getLangConfig().getString("tab_online", "Онлайн: ");
+                String labelRole = getLangConfig().getString("tab_role", "Ваша роль: ");
+                String labelPing = getLangConfig().getString("tab_ping", "Пинг: ");
+                String labelPingMs = getLangConfig().getString("tab_ping_ms", " мс");
 
                 net.kyori.adventure.text.Component footer = net.kyori.adventure.text.Component.text()
                     .append(net.kyori.adventure.text.Component.text("\n", net.kyori.adventure.text.format.NamedTextColor.GRAY))
@@ -202,7 +204,7 @@ public final class SLfeatures extends JavaPlugin implements Listener {
         } else if (worldName.equals("banished") || worldName.equals("banished_nether")) {
             baseWorld = "banished";
         }
-        return getConfig().getString("messages." + lang + ".world_prefixes." + baseWorld, "●");
+        return getLangConfig().getString("world_prefixes." + baseWorld, "●");
     }
 
     private net.kyori.adventure.text.format.TextColor getWorldColor(String worldName) {
@@ -224,7 +226,7 @@ public final class SLfeatures extends JavaPlugin implements Listener {
             for (String roleKey : rolePerms.getKeys(false)) {
                 String perm = rolePerms.getString(roleKey);
                 if (perm != null && !perm.isEmpty() && player.hasPermission(perm)) {
-                    String mappedRole = getConfig().getString("messages." + lang + ".roles." + roleKey.toLowerCase());
+                    String mappedRole = getLangConfig().getString("roles." + roleKey.toLowerCase());
                     if (mappedRole != null) {
                         return mappedRole;
                     }
@@ -242,14 +244,14 @@ public final class SLfeatures extends JavaPlugin implements Listener {
                 List<String> roles = config.getStringList("players." + player.getUniqueId().toString() + ".roles");
                 if (roles != null && !roles.isEmpty()) {
                     String firstRole = roles.get(0).toLowerCase();
-                    String mappedRole = getConfig().getString("messages." + lang + ".roles." + firstRole);
+                    String mappedRole = getLangConfig().getString("roles." + firstRole);
                     if (mappedRole != null) {
                         return mappedRole;
                     }
                 }
             }
         }
-        return getConfig().getString("messages." + lang + ".roles.default", "§7Житель");
+        return getLangConfig().getString("roles.default", "§7Житель");
     }
 
     @EventHandler
@@ -304,7 +306,7 @@ public final class SLfeatures extends JavaPlugin implements Listener {
                         ItemStack invisibleFrame = new ItemStack(Material.ITEM_FRAME);
                         ItemMeta meta = invisibleFrame.getItemMeta();
                         if (meta != null) {
-                            String frameName = getConfig().getString("messages." + lang + ".invisible_frame_name", "Невидимая рамка");
+                            String frameName = getLangConfig().getString("invisible_frame_name", "Невидимая рамка");
                             meta.displayName(net.kyori.adventure.text.Component.text(frameName, net.kyori.adventure.text.format.NamedTextColor.GOLD));
                             meta.getPersistentDataContainer().set(invisibleFrameKey, PersistentDataType.BYTE, (byte) 1);
                             invisibleFrame.setItemMeta(meta);
@@ -367,6 +369,30 @@ public final class SLfeatures extends JavaPlugin implements Listener {
                 }
             }
         }
+    }
+
+    public void loadLangConfig() {
+        java.io.File langFolder = new java.io.File(getDataFolder(), "lang");
+        if (!langFolder.exists()) {
+            langFolder.mkdirs();
+        }
+        java.io.File langFile = new java.io.File(langFolder, "messages_" + lang + ".yml");
+        if (!langFile.exists()) {
+            try {
+                saveResource("lang/messages_ru.yml", false);
+            } catch (Exception ignored) {}
+            try {
+                saveResource("lang/messages_en.yml", false);
+            } catch (Exception ignored) {}
+        }
+        langConfig = org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(new java.io.File(langFolder, "messages_" + lang + ".yml"));
+    }
+
+    public org.bukkit.configuration.file.FileConfiguration getLangConfig() {
+        if (langConfig == null) {
+            loadLangConfig();
+        }
+        return langConfig;
     }
 }
 
