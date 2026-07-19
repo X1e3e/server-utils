@@ -16,6 +16,7 @@
 - **Защита артов:** Защита заблокированных артов (карт), книг и шаблонов от копирования другими игроками.
 - **Изменение размера:** Команда `/scale` для изменения размера модельки игрока.
 - **Кастомные рецепты:** Возможность создавать собственные Shaped рецепты крафта с настраиваемыми именами и описаниями результатов через `config.yml`.
+- **Создатель рецептов в игре:** Удобный визуальный интерфейс для создания рецептов крафта прямо на сервере при помощи команды `/recipecreator <название>`.
 - **Кастомизация Tab:** Настройка заголовков, подвалов, пинга, ролей и префиксов миров.
 
 ### Команды
@@ -23,6 +24,7 @@
 - `/lock` — Заблокировать карту/книгу от копирования.
 - `/unlock` — Разблокировать карту/книгу.
 - `/serverutils reload` — Перезагрузить конфигурацию плагина (право `serverutils.admin`).
+- `/recipecreator <название>` — Открыть GUI для создания кастомного рецепта крафта и его автоматического сохранения в `config.yml` (право `serverutils.admin`).
 
 ### Настройка конфигурации (config.yml)
 ```yaml
@@ -86,6 +88,7 @@ A clean and configurable server utility and custom recipe plugin for Bukkit/Pape
 - **Art Protection:** Protect locked maps (arts), written books, and templates from copying by others.
 - **Player Scaling:** Command `/scale` to change player model scale size.
 - **Custom Recipes:** Register custom Shaped crafting recipes with names and lore via `config.yml`.
+- **In-game Recipe Creator:** Convenient visual GUI to design crafting recipes directly on the server via the `/recipecreator <name>` command.
 - **Tab Customization:** Format header/footer, ping, world prefixes, and player roles.
 
 ### Commands
@@ -93,6 +96,7 @@ A clean and configurable server utility and custom recipe plugin for Bukkit/Pape
 - `/lock` — Lock a map/book from being copied.
 - `/unlock` — Unlock a map/book.
 - `/serverutils reload` — Reload the configuration (permission `serverutils.admin`).
+- `/recipecreator <name>` — Open GUI to create a custom crafting recipe and automatically save it to `config.yml` (permission `serverutils.admin`).
 
 ### Configuration Example (config.yml)
 ```yaml

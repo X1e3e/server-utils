@@ -19,4 +19,8 @@ commands:
     description: Reload Server Utils configuration
     usage: /serverutils reload
     aliases: [slfeatures, sutils]
+  recipecreator:
+    description: Open in-game recipe creator GUI
+    usage: /recipecreator <name>
+    aliases: [rc, customcraft]
 

@@ -46,6 +46,9 @@ public final class SLfeatures extends JavaPlugin implements Listener {
         getServer().getPluginManager().registerEvents(this, this);
         getServer().getPluginManager().registerEvents(new FeaturesListener(this), this);
         
+        RecipeCreatorCommand recipeCreator = new RecipeCreatorCommand(this);
+        getServer().getPluginManager().registerEvents(recipeCreator, this);
+        
         if (getConfig().getBoolean("features.hide-nametags", true)) {
             setupScoreboard();
         }
@@ -75,6 +78,10 @@ public final class SLfeatures extends JavaPlugin implements Listener {
         if (getCommand("serverutils") != null) {
             getCommand("serverutils").setExecutor(utilCmds);
             getCommand("serverutils").setTabCompleter(utilCmds);
+        }
+        if (getCommand("recipecreator") != null) {
+            getCommand("recipecreator").setExecutor(recipeCreator);
+            getCommand("recipecreator").setTabCompleter(recipeCreator);
         }
         
         if (getConfig().getBoolean("features.tab-formatter", true)) {
