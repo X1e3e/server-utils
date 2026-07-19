@@ -1,6 +1,22 @@
 # Language: "ru" or "en"
 lang: "ru"
 
+# Включение и отключение функций плагина
+features:
+  elytra-end-restriction: true     # Запрет полетов на элитрах в Энде
+  anvil-repair: true               # Ремонт наковален железными блоками
+  door-knocking: true              # Стук в деревянные двери (Shift + ЛКМ)
+  enderman-pickup-protection: true # Запрет эндерменам переносить блоки
+  item-signing: true               # Подпись предметов пером (Shift + ПКМ)
+  item-lock-protection: true       # Защита заблокированных артов/книг от копирования
+  tab-formatter: true              # Форматирование списка игроков (Tab)
+  hide-nametags: true              # Скрытие никнеймов над головой игроков
+  recipes:
+    invisible-frame: true          # Крафт невидимой рамки
+    invisible-light: true          # Крафт невидимого источника света
+    debug-stick: true              # Крафт отладочной палки (Debug Stick)
+
+
 # Сопоставление ролей с правами доступа (для отображения роли в Tab и статус-баре)
 # Игроку будет присвоена первая роль из списка, на которую у него есть право (permission).
 role-permissions:

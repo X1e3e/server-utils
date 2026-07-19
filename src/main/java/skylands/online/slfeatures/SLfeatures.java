@@ -46,10 +46,18 @@ public final class SLfeatures extends JavaPlugin implements Listener {
         getServer().getPluginManager().registerEvents(this, this);
         getServer().getPluginManager().registerEvents(new FeaturesListener(this), this);
         
-        setupScoreboard();
-        registerInvisibleFrameRecipe();
-        registerInvisibleLightRecipe();
-        registerDebugStickRecipe();
+        if (getConfig().getBoolean("features.hide-nametags", true)) {
+            setupScoreboard();
+        }
+        if (getConfig().getBoolean("features.recipes.invisible-frame", true)) {
+            registerInvisibleFrameRecipe();
+        }
+        if (getConfig().getBoolean("features.recipes.invisible-light", true)) {
+            registerInvisibleLightRecipe();
+        }
+        if (getConfig().getBoolean("features.recipes.debug-stick", true)) {
+            registerDebugStickRecipe();
+        }
         
         UtilityCommands utilCmds = new UtilityCommands(this);
         if (getCommand("scale") != null) {
@@ -63,7 +71,9 @@ public final class SLfeatures extends JavaPlugin implements Listener {
             getCommand("unlock").setExecutor(utilCmds);
         }
         
-        startTabFormatter();
+        if (getConfig().getBoolean("features.tab-formatter", true)) {
+            startTabFormatter();
+        }
         
         getLogger().info("SLfeatures has been enabled successfully!");
     }

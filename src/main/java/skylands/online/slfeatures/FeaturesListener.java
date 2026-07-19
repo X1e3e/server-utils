@@ -49,6 +49,7 @@ public class FeaturesListener implements Listener {
     // 1. Ограничение элитр в Энде
     @EventHandler
     public void onGlideToggle(EntityToggleGlideEvent event) {
+        if (!plugin.getConfig().getBoolean("features.elytra-end-restriction", true)) return;
         if (event.getEntity() instanceof Player player) {
             if (player.getWorld().getEnvironment() == World.Environment.THE_END) {
                 if (event.isGliding()) {
@@ -62,6 +63,7 @@ public class FeaturesListener implements Listener {
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
+        if (!plugin.getConfig().getBoolean("features.elytra-end-restriction", true)) return;
         Player player = event.getPlayer();
         if (player.isGliding() && player.getWorld().getEnvironment() == World.Environment.THE_END) {
             player.setGliding(false);
@@ -72,6 +74,7 @@ public class FeaturesListener implements Listener {
     // 2. Ремонт наковальни железным блоком
     @EventHandler
     public void onAnvilRepair(PlayerInteractEvent event) {
+        if (!plugin.getConfig().getBoolean("features.anvil-repair", true)) return;
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
         org.bukkit.block.Block block = event.getClickedBlock();
         if (block == null) return;
@@ -102,6 +105,7 @@ public class FeaturesListener implements Listener {
     // 3. Тук в двери
     @EventHandler
     public void onDoorKnock(PlayerInteractEvent event) {
+        if (!plugin.getConfig().getBoolean("features.door-knocking", true)) return;
         if (event.getAction() != Action.LEFT_CLICK_BLOCK) return;
         org.bukkit.block.Block block = event.getClickedBlock();
         if (block == null) return;
@@ -141,6 +145,7 @@ public class FeaturesListener implements Listener {
     // 4. Эндермены не могут брать блоки
     @EventHandler
     public void onEndermanPickup(EntityChangeBlockEvent event) {
+        if (!plugin.getConfig().getBoolean("features.enderman-pickup-protection", true)) return;
         if (event.getEntityType() == org.bukkit.entity.EntityType.ENDERMAN) {
             event.setCancelled(true);
         }
@@ -149,6 +154,7 @@ public class FeaturesListener implements Listener {
     // 5. Подпись предметов пером (Shift + ПКМ)
     @EventHandler
     public void onItemSign(PlayerInteractEvent event) {
+        if (!plugin.getConfig().getBoolean("features.item-signing", true)) return;
         if (event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
 
         Player player = event.getPlayer();
@@ -195,6 +201,7 @@ public class FeaturesListener implements Listener {
     // 6. Защита заблокированных предметов от копирования (Crafting Table)
     @EventHandler
     public void onPrepareCraft(PrepareItemCraftEvent event) {
+        if (!plugin.getConfig().getBoolean("features.item-lock-protection", true)) return;
         CraftingInventory inventory = event.getInventory();
         ItemStack[] matrix = inventory.getMatrix();
 
@@ -229,6 +236,7 @@ public class FeaturesListener implements Listener {
     // 7. Защита заблокированных предметов от копирования (Cartography Table)
     @EventHandler
     public void onCartographyClick(InventoryClickEvent event) {
+        if (!plugin.getConfig().getBoolean("features.item-lock-protection", true)) return;
         Inventory inventory = event.getInventory();
         if (inventory instanceof CartographyInventory) {
             if (event.getSlotType() == org.bukkit.event.inventory.InventoryType.SlotType.RESULT) {
